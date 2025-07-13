@@ -16,6 +16,10 @@ fuel_consumption = 0
 throttle = 1
 angle = 0
 
+star_position = []
+for i in range(int((screen_length*screen_width)/1000)):
+    star_position.append([random.randint(0, screen_length), random.randint(0, screen_width-100)])
+
 def draw_text(text, font, color, x, y):
     img = font.render(text, True, color)
     window.blit(img, (x, y))
@@ -49,18 +53,24 @@ while True:
     fuel_consumption = fuel_consumption + throttle
 
     #drawing
-    window.fill("white")
+    window.fill("black")
+    pygame.draw.rect(window, "darkgrey", (0, screen_width-100, screen_length, 100))
+
+    for i in range(len(star_position)):
+        pygame.draw.rect(window, "white", (star_position[i][0], star_position[i][1], 2, 2))
+
     pygame.draw.rect(window, "red", (position[0], position[1], 10, 10))
+
     formated_angle = round(angle*180/math.pi, 1)
-    draw_text(f"Angle: {formated_angle}", text_font, "black", 0, 0)
-    draw_text(f"Throttle: {throttle}", text_font, "black", 0, 20)
+    draw_text(f"Angle: {formated_angle}", text_font, "white", 0, 0)
+    draw_text(f"Throttle: {throttle}", text_font, "white", 0, 20)
 
     #wincondition
-    if position[1]+10 >= screen_width and modulus <= 100:
+    if position[1]+10 >= screen_width-100 and modulus <= 100:
         print(f"Succesfull landing (fuel consumed: {fuel_consumption})")
         pygame.quit()
         exit()
-    if position[1]+10 >= screen_width and modulus > 100:
+    if position[1]+10 >= screen_width-100 and modulus > 100:
         print("Failed landing")
         pygame.quit()
         exit()
