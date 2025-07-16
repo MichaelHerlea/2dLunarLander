@@ -3,6 +3,8 @@ import random
 import math
 from matplotlib import pyplot
 
+import landingAlgorithm as autopilot
+
 pygame.init()
 screen_length = 800
 screen_width = 800
@@ -44,12 +46,9 @@ while True:
     modulus = math.sqrt(velocity[0]**2 + velocity[1]**2)
 
     #autopilot algorithm (calculating the angle and the throttle)
-    angle = math.acos(velocity[0]/modulus)
-
-    if modulus < 100:
-        throttle = 1
-    else:
-        throttle = 3
+    output = autopilot.landing_algorithm(modulus, velocity) 
+    angle = output[0]
+    throttle = output[1]
     
     #physics
     velocity[0] = velocity[0] - throttle*math.cos(angle)
